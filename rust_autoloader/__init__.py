@@ -85,10 +85,12 @@ def kill_process(popen_obj, max_exec_time):
     print "process killed..."
     return -1
 
-if __name__ == "__main__":
-
+def run():
     # polls the current directory rust files every 2 seconds.
     print "autoloader up and running... go and edit your rust files now!"
     while True:
         time.sleep(2)
         run_hash_check()
+
+if __name__ == "__main__":
+    run()
