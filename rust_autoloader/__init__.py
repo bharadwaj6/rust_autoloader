@@ -4,13 +4,17 @@ import time
 import subprocess
 from threading import Thread
 
-def get_rust_files():
+def get_rust_files(dir_path):
     """get all the rust files in current directory"""
+
     rust_files = []
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    for path in os.listdir(current_path):
+    if dir_path[len(dir_path)-1] == '/':
+        dir_path = dir_path[:len(dir_path)-1]
+
+    # check for .rs files and store the absolute path.
+    for path in os.listdir(dir_path):
         if path.endswith('.rs'):
-            rust_files.append(path)
+            rust_files.append(dir_path + '/' + path)
     return rust_files
 
 rust_files_hash = {}
@@ -22,10 +26,10 @@ def hashfile(afile, hasher, blocksize=65536):
         buf = afile.read(blocksize)
     return hasher.digest()
 
-def run_hash_check():
+def run_hash_check(dir_path):
     """ check hash changes for rust files and call compilation if change detected """
 
-    for fname in get_rust_files():
+    for fname in get_rust_files(dir_path):
         if fname not in rust_files_hash:
             rust_files_hash[fname] = hashfile((open(fname, 'rb')), hashlib.md5())
         else:
@@ -50,9 +54,7 @@ def run_file(fname):
 
     # TODO: taking input from autoloader.
 
-    # works only in a unix like env for now.
-    fname = "./" + fname.rstrip('.rs')
-    p = subprocess.Popen([fname], stdout=subprocess.PIPE)
+    p = subprocess.Popen([fname.rstrip('.rs')], stdout=subprocess.PIPE)
 
     # a simple thread that polls the process and kills if execution time exceeds 10 seconds.
     thread = Thread(target=kill_process, args=(p, 10,))
@@ -85,12 +87,12 @@ def kill_process(popen_obj, max_exec_time):
     print "process killed..."
     return -1
 
-def run():
+def run(dir_path):
     # polls the current directory rust files every 2 seconds.
     print "autoloader up and running... go and edit your rust files now!"
     while True:
         time.sleep(2)
-        run_hash_check()
+        run_hash_check(dir_path)
 
 if __name__ == "__main__":
-    run()
+    run(os.path.dirname(os.path.abspath(__file__)))
