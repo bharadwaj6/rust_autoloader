@@ -1,18 +1,35 @@
 Rust Autoloader
 ================
 
+[![Downloads](https://pypip.in/download/rust-autoloader/badge.svg)](https://pypi.python.org/pypi/rust-autoloader/)
+[![Supported Python versions](https://pypip.in/py_versions/rust-autoloader/badge.svg)](https://pypi.python.org/pypi/rust-autoloader/)
+
+
 This script detects any changes made to the rust files (`.rs`)
 in current working directory and serves as an *autoloader* for your development.
 
 Use this when you are learning rust/testing/editing rust files and
 you're tired of doing `rustc test.rs` and `./test` over and over again.
 
-Put this in the directory where your working rust files are and keep it running using something like `python autoloader.py`.
+Installation
+=============
 
-NOTE: This script is not meant to be any kind of substitute for `cargo build`.
-Use this only when you're toying on some `.rs` files and don't use it in any serious project.
+    $ pip install rust-autoloader
 
-NOTE 2: Doesn't play well with compiler warnings (yet). (One has to execute
-  manually if warnings are generated).
+Usage
+======
 
-NOTE 3: Not possible to pass input to your rust program (yet).
+    from rust_autoloder import run
+    run("path-to-working-directory")
+
+You can also take the `autoloader.py` script and keep it running in the working
+directory using `python autoloader.py` while working.
+
+NOTE
+=====
+
+* This script is not meant to be any kind of substitute for `cargo build`.  Use this only when you're toying on some `.rs` files and don't use it in any serious project.
+<br/>
+* Doesn't play well with compiler warnings (yet). (One has to execute manually if warnings are generated).
+<br/>
+* Not possible to pass input to your rust program (yet).
